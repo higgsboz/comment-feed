@@ -6,3 +6,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.link-secondary {
+  color: #6c757d!important;
+  text-decoration: none!important;
+  cursor: pointer;
+}

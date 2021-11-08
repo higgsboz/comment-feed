@@ -1,33 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPhotoVideo, faHeart, faCommentDots, faEllipsisH, faMapMarkerAlt, faCircle } from '@fortawesome/free-solid-svg-icons'
-import profile from './profile-pic.jpg';
+import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons'
+import profilePicture from './assets/profile-pic.jpg';
+import {Person} from './types/person';
+import {Post} from './types/post';
 
-interface Post {
-  text: string;
-  likes: number;
-  comments: Comment[];
-  createdDate: Date;
-  createdBy: Person;
-}
-
-interface ContentCreatorProps {
-  addPost: (newPost: Post) => void;
-}
-
-interface Comment {
-  likes: number;
-  text: string;
-  createdDate: Date;
-  createdBy: Person;
-}
-
-interface Person {
-  firstName: string;
-  lastName: string;
-  occupation: string;
-}
+import {FeedProvider, useFeed} from './FeedContext';
+import PostItem from './components/PostItem';
 
 const tempPerson: Person = {
   firstName: "Brandon",
@@ -35,48 +15,21 @@ const tempPerson: Person = {
   occupation: "Software Engineer"
 }
 
-const PostItem = ({text, likes, comments, createdDate, createdBy}: Post) => {
-  return (
-    <div className="card shadow-sm rounded-3 mt-3">
-      <div className="card-body">
-        <div className="d-flex flex-row mb-3">
-          <img src={profile} className="rounded-circle" alt="profile" width="60" height="60"/>
-          <div className="d-flex flex-row w-100 justify-content-between">
-            <div className="ms-3">
-              <div className="fw-bold">{`${tempPerson.firstName} ${tempPerson.lastName}`}</div>
-              <div className="text-primary fw-bold" style={{fontSize: 12}}>
-                <FontAwesomeIcon className="me-2" icon={faMapMarkerAlt} />
-                OH, USA
-              </div>
-              <div className="text-secondary fw-bold" style={{fontSize: 12}}>1 minute ago</div>
-            </div>
-            <FontAwesomeIcon className="my-auto" icon={faEllipsisH} />
-          </div>
-        </div>
-        <div>
-          {text}
-        </div>
-        <div className="d-flex text-secondary">
-          {likes} Likes
-          <FontAwesomeIcon className="my-auto mx-1" icon={faCircle} style={{fontSize: 4}} /> 
-          {comments.length} Comments
-        </div>
-      </div>
-      <div className="card-footer">
-        <span>
-          <FontAwesomeIcon className="me-2 text-secondary" icon={faHeart} />
-          <a className="text-decoration-none text-secondary">Like</a>
-        </span>
-        <span className="ms-3">
-          <FontAwesomeIcon className="me-2 text-secondary" icon={faCommentDots} />
-          <a className="text-decoration-none text-secondary">Comment</a>
-        </span>
-      </div>
-    </div>
-  )
-}
+const ContentCreator = () => {
 
-const ContentCreator = (props: ContentCreatorProps) => {
+  const {posts, setPosts} = useFeed();
+
+  const addPost = (text: string) => {
+    const newPost = {
+      id: posts.length + 1,
+      text: text,
+      likes: 0,
+      createdDate: new Date(),
+      createdBy: tempPerson,
+      isDeleted: false
+    }
+    setPosts([...posts, newPost])
+  } 
 
   const [message, setMessage] = useState<string>("");
 
@@ -88,7 +41,7 @@ const ContentCreator = (props: ContentCreatorProps) => {
     <div className="card shadow-sm rounded-3">
       <div className="card-body">
         <div className="mb-3 d-flex flex-row">
-          <img src={profile} className="rounded-circle" alt="profile" width="40" height="40"/>
+          <img src={profilePicture} className="rounded-circle" alt="profile" width="40" height="40"/>
           <textarea 
             className="form-control border-0" 
             id="postTextarea" 
@@ -101,7 +54,7 @@ const ContentCreator = (props: ContentCreatorProps) => {
         </div>
       </div>
       <div className="card-footer bg-transparent">
-        <div className="d-flex justify-content-between">
+        <div className="d-flex flex-wrap justify-content-between">
           <button type="button" className="btn btn-dark rounded-pill">
             <FontAwesomeIcon className="me-2" icon={faPhotoVideo} />
             Photo/Video
@@ -110,9 +63,10 @@ const ContentCreator = (props: ContentCreatorProps) => {
             type="button" 
             className="btn btn-primary" 
             onClick={() => {
-              props.addPost({text: message, likes: 0, comments: [], createdDate: new Date(), createdBy: tempPerson});
+              addPost(message);
               setMessage("");
             }}
+            disabled={message.length === 0}
           >
             Post It
           </button>
@@ -122,21 +76,31 @@ const ContentCreator = (props: ContentCreatorProps) => {
   )
 }
 
-function App() {
-
-  const [posts, setPosts] = useState<Post[]>([]);
+const Feed = () => {
+  const {posts} = useFeed();
 
   return (
-    <div className="min-vh-100" style={{backgroundColor: "#D8E1EC"}}>
+    <div className="min-vh-100" style={{backgroundColor: "#D9E1EB"}}>
       <div className="container">
-        <div className="pt-3">
-          <ContentCreator addPost={(newPost: Post) => setPosts([...posts, newPost])}/>
+        <div className="py-3">
+          <ContentCreator />
           {posts.map((post: Post) => (
-            <PostItem {...post}/>
+            <PostItem 
+              key={`Post-${post.id}`} 
+              details={{...post}}
+            />
           ))}
         </div>
       </div>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <FeedProvider>
+      <Feed />
+    </FeedProvider>
   );
 }
 
