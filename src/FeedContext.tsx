@@ -17,11 +17,25 @@ type FeedProviderProps = {
 const FeedContext = createContext<FeedContextProps>({} as FeedContextProps);
 
 export function FeedProvider({ children }: FeedProviderProps) {
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [comments, setComments] = useState<Comment[]>([]);
+    const localPosts: Post[] = JSON.parse(localStorage.getItem('postData') || '[]');
+    const localComments: Comment[] = JSON.parse(localStorage.getItem('commentData') || '[]');
+
+
+    const [posts, setPosts] = useState<Post[]>(localPosts);
+    const [comments, setComments] = useState<Comment[]>(localComments);
+
+    const updatePosts = (updatedPosts: Post[]) => {
+        localStorage.setItem('postData', JSON.stringify(updatedPosts));
+        setPosts(updatedPosts);
+    }
+
+    const updateComments = (updatedComments: Comment[]) => {
+        localStorage.setItem('commentData', JSON.stringify(updatedComments));
+        setComments(updatedComments);
+    }
 
     return (
-        <FeedContext.Provider value={{posts: posts, setPosts: setPosts, comments: comments, setComments: setComments}}>
+        <FeedContext.Provider value={{posts: posts, setPosts: updatePosts, comments: comments, setComments: updateComments}}>
             {children}
         </FeedContext.Provider>
     )

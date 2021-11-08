@@ -84,7 +84,7 @@ const Feed = () => {
       <div className="container">
         <div className="py-3">
           <ContentCreator />
-          {posts.map((post: Post) => (
+          {posts.filter(post => !post.isDeleted).map((post: Post) => (
             <PostItem 
               key={`Post-${post.id}`} 
               details={{...post}}
