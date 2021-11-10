@@ -2,18 +2,12 @@ import { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons'
-import profilePicture from './assets/profile-pic.jpg';
-import {Person} from './types/person';
 import {Post} from './types/post';
 
 import {FeedProvider, useFeed} from './FeedContext';
 import PostItem from './components/PostItem';
-
-const tempPerson: Person = {
-  firstName: "Brandon",
-  lastName: "Minner",
-  occupation: "Software Engineer"
-}
+import Avatar from './components/Avatar';
+import Me from './assets/Me.json'
 
 const ContentCreator = () => {
 
@@ -25,7 +19,7 @@ const ContentCreator = () => {
       text: text,
       likes: 0,
       createdDate: new Date(),
-      createdBy: tempPerson,
+      createdBy: Me,
       isDeleted: false
     }
     setPosts([...posts, newPost])
@@ -33,23 +27,19 @@ const ContentCreator = () => {
 
   const [message, setMessage] = useState<string>("");
 
-  const handleTextareaChange = (e: any) => {
-    setMessage(e.target.value);
-  }
-
   return (
     <div className="card shadow-sm rounded-3">
       <div className="card-body">
         <div className="mb-3 d-flex flex-row">
-          <img src={profilePicture} className="rounded-circle" alt="profile" width="40" height="40"/>
+          <Avatar size="sm"/>
           <textarea 
-            className="form-control border-0" 
+            className="form-control border-0 ms-2 ps-1" 
             id="postTextarea" 
             rows={2} 
             placeholder="What is on your mind?" 
             style={{resize: 'none'}}
             value={message}
-            onChange={handleTextareaChange}
+            onChange={e => setMessage(e.target.value)}
           />
         </div>
       </div>
@@ -84,10 +74,10 @@ const Feed = () => {
       <div className="container">
         <div className="py-3">
           <ContentCreator />
-          {posts.filter(post => !post.isDeleted).map((post: Post) => (
+          {posts.filter(post => !post.isDeleted).sort((a,b) => b.createdDate.getTime() - a.createdDate.getTime()).map((post: Post) => (
             <PostItem 
               key={`Post-${post.id}`} 
-              details={{...post}}
+              {...post}
             />
           ))}
         </div>

@@ -14,11 +14,33 @@ type FeedProviderProps = {
     children?: ReactNode;
 }
 
+// This is passed into the JSON.parse() call as the reviver so that
+// dates formatted as JSON strings will be converted into JS Date objects.
+// This code was taken from https://weblog.west-wind.com/posts/2014/jan/06/javascript-json-date-parsing-and-real-dates
+const dateParser = (_key: any, value: any) => {
+    // eslint-disable-next-line
+    var reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+    // eslint-disable-next-line
+    var reMsAjax = /^\/Date\((d|-|.*)\)[\/|\\]$/;
+    
+    if (typeof value === 'string') {
+        var a = reISO.exec(value);
+        if (a)
+            return new Date(value);
+        a = reMsAjax.exec(value);
+        if (a) {
+            var b = a[1].split(/[-+,.]/);
+            return new Date(b[0] ? +b[0] : 0 - +b[1]);
+        }
+    }
+    return value;
+}
+
 const FeedContext = createContext<FeedContextProps>({} as FeedContextProps);
 
 export function FeedProvider({ children }: FeedProviderProps) {
-    const localPosts: Post[] = JSON.parse(localStorage.getItem('postData') || '[]');
-    const localComments: Comment[] = JSON.parse(localStorage.getItem('commentData') || '[]');
+    const localPosts: Post[] = JSON.parse(localStorage.getItem('postData') || '[]', dateParser);
+    const localComments: Comment[] = JSON.parse(localStorage.getItem('commentData') || '[]', dateParser);
 
 
     const [posts, setPosts] = useState<Post[]>(localPosts);
