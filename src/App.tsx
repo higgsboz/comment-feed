@@ -73,12 +73,12 @@ const Feed = function (): JSX.Element {
       <div className="container">
         <div className="py-3">
           <ContentCreator />
-          {posts.filter((post) => !post.isDeleted).sort((a, b) => b.createdDate.getTime() - a.createdDate.getTime()).map((post: Post) => (
-            <PostItem
-              key={`Post-${post.id}`}
-              post={post}
-            />
-          ))}
+          {posts
+            .filter((post) => !post.isDeleted)
+            .sort((a, b) => b.createdDate.getTime() - a.createdDate.getTime())
+            .map((post: Post) => (
+              <PostItem key={`Post-${post.id}`} post={post} />
+            ))}
         </div>
       </div>
     </div>

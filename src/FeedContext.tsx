@@ -1,20 +1,18 @@
-import React, {
-  createContext, ReactNode, useContext, useState,
-} from 'react';
+import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 import { Comment } from './types/comment';
 import { Post } from './types/post';
 
 export type FeedContextProps = {
-    posts: Post[],
-    setPosts: (posts: Post[]) => void,
-    comments: Comment[],
-    setComments: (comments: Comment[]) => void
-}
+  posts: Post[];
+  setPosts: (posts: Post[]) => void;
+  comments: Comment[];
+  setComments: (comments: Comment[]) => void;
+};
 
 type FeedProviderProps = {
-    children?: ReactNode;
-}
+  children?: ReactNode;
+};
 
 // This is passed into the JSON.parse() call as the reviver so that
 // dates formatted as JSON strings will be converted into JS Date objects.
@@ -22,13 +20,17 @@ type FeedProviderProps = {
 // This code was taken from https://weblog.west-wind.com/posts/2014/jan/06/javascript-json-date-parsing-and-real-dates
 const dateParser = (_key: any, value: any): any => {
   // eslint-disable-next-line
-    var reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+  var reISO =
+    // eslint-disable-next-line max-len
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
   // eslint-disable-next-line
-    var reMsAjax = /^\/Date\((d|-|.*)\)[\/|\\]$/;
+  var reMsAjax = /^\/Date\((d|-|.*)\)[\/|\\]$/;
 
   if (typeof value === 'string') {
     let a = reISO.exec(value);
-    if (a) { return new Date(value); }
+    if (a) {
+      return new Date(value);
+    }
     a = reMsAjax.exec(value);
     if (a) {
       const b = a[1].split(/[-+,.]/);
@@ -40,12 +42,16 @@ const dateParser = (_key: any, value: any): any => {
 
 const FeedContext = createContext<FeedContextProps>({} as FeedContextProps);
 
-// eslint-disable-next-line func-names, max-len
+// eslint-disable-next-line func-names,
 export const FeedProvider = function ({ children }: FeedProviderProps): any {
-  // eslint-disable-next-line max-len
-  const localPosts: Post[] = JSON.parse(localStorage.getItem('postData') || '[]', dateParser);
-  // eslint-disable-next-line max-len
-  const localComments: Comment[] = JSON.parse(localStorage.getItem('commentData') || '[]', dateParser);
+  const localPosts: Post[] = JSON.parse(
+    localStorage.getItem('postData') || '[]',
+    dateParser
+  );
+  const localComments: Comment[] = JSON.parse(
+    localStorage.getItem('commentData') || '[]',
+    dateParser
+  );
 
   const [posts, setPosts] = useState<Post[]>(localPosts);
   const [comments, setComments] = useState<Comment[]>(localComments);
@@ -68,10 +74,14 @@ export const FeedProvider = function ({ children }: FeedProviderProps): any {
   // }), [posts, updatePosts, comments, updateComments]);
 
   return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <FeedContext.Provider value={{
-      posts, setPosts: updatePosts, comments, setComments: updateComments,
-    }}
+    <FeedContext.Provider
+      // eslint-disable-next-line react/jsx-no-constructed-context-values
+      value={{
+        posts,
+        setPosts: updatePosts,
+        comments,
+        setComments: updateComments,
+      }}
     >
       {children}
     </FeedContext.Provider>

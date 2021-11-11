@@ -1,9 +1,9 @@
 {
-    "firstName": "Brandon",
-    "lastName": "Minner",
-    "occupation": "Software Engineer",
-    "location": {
-      "state": "Ohio",
-      "country": "USA"
-    }
+  "firstName": "Brandon",
+  "lastName": "Minner",
+  "occupation": "Software Engineer",
+  "location": {
+    "state": "Ohio",
+    "country": "USA"
   }
+}

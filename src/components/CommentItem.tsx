@@ -11,14 +11,12 @@ import { useFeed } from '../FeedContext';
 import Avatar from './Avatar';
 
 interface Props {
-  comment: Comment
+  comment: Comment;
 }
 
 // eslint-disable-next-line func-names
 const CommentItem = function ({ comment }: Props): JSX.Element {
-  const {
-    id, text, likes, createdDate, createdBy,
-  } = comment;
+  const { id, text, likes, createdDate, createdBy } = comment;
 
   const { comments, setComments } = useFeed();
 
@@ -36,7 +34,9 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
     ]);
   };
 
-  const handleCommentEditKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+  const handleCommentEditKeyPress = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ): void => {
     const target = e.target as HTMLTextAreaElement;
     if (e.key === 'Enter' && target.value !== '') {
       updateComment({ ...comment, text: target.value });
@@ -82,15 +82,9 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
           <span className="text-primary" style={{ fontSize: 14 }}>
             {createdBy.occupation}
           </span>
-          <div style={{ fontSize: 14 }}>
-            {renderTextContent()}
-          </div>
+          <div style={{ fontSize: 14 }}>{renderTextContent()}</div>
           <div className="d-flex text-secondary">
-            <span className="me-3">
-              {likes}
-              {' '}
-              Likes
-            </span>
+            <span className="me-3">{likes} Likes</span>
             <span className="me-3">|</span>
             <button
               className="btn btn-link link-secondary me-3 p-0"

@@ -1,7 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCircle, faCommentDots, faEllipsisH, faHeart, faMapMarkerAlt,
+  faCircle,
+  faCommentDots,
+  faEllipsisH,
+  faHeart,
+  faMapMarkerAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { Post } from '../types/post';
 import { Comment } from '../types/comment';
@@ -12,25 +16,26 @@ import Avatar from './Avatar';
 import Me from '../assets/Me.json';
 
 interface Props {
-  post: Post
+  post: Post;
 }
 
 // eslint-disable-next-line func-names
 const PostItem = function ({ post }: Props): JSX.Element {
-  const {
-    id, text, likes, createdDate, createdBy,
-  } = post;
+  const { id, text, likes, createdDate, createdBy } = post;
 
-  const {
-    posts, setPosts, comments, setComments,
-  } = useFeed();
+  const { posts, setPosts, comments, setComments } = useFeed();
 
   const [showCommentSection, setShowCommentSection] = useState<boolean>(false);
   const [isEditMode, setEditMode] = useState<boolean>(false);
   const [editText, setEditText] = useState<string>(text);
 
-  const postComments: Comment[] = useMemo(() => comments.filter((comment) => comment.postId === id && !comment.isDeleted)
-    .sort((a, b) => b.createdDate.getTime() - a.createdDate.getTime()), [id, comments]);
+  const postComments: Comment[] = useMemo(
+    () =>
+      comments
+        .filter((comment) => comment.postId === id && !comment.isDeleted)
+        .sort((a, b) => b.createdDate.getTime() - a.createdDate.getTime()),
+    [id, comments]
+  );
 
   const addComment = (commentText: string): void => {
     const comment: Comment = {
@@ -42,10 +47,7 @@ const PostItem = function ({ post }: Props): JSX.Element {
       createdBy: Me,
       isDeleted: false,
     };
-    setComments([
-      ...comments,
-      comment,
-    ]);
+    setComments([...comments, comment]);
   };
 
   const updatePost = (updatedPost: Post): void => {
@@ -109,15 +111,9 @@ const PostItem = function ({ post }: Props): JSX.Element {
               </div>
               <div className="text-primary fw-bold" style={{ fontSize: 12 }}>
                 <FontAwesomeIcon className="me-2" icon={faMapMarkerAlt} />
-                {createdBy.location.state}
-                ,
-                {' '}
-                {createdBy.location.country}
+                {createdBy.location.state}, {createdBy.location.country}
               </div>
-              <div
-                className="text-secondary fw-bold"
-                style={{ fontSize: 12 }}
-              >
+              <div className="text-secondary fw-bold" style={{ fontSize: 12 }}>
                 {dateToString(createdDate)}
               </div>
             </div>
@@ -149,7 +145,12 @@ const PostItem = function ({ post }: Props): JSX.Element {
                   <button
                     className="btn btn-link dropdown-item"
                     type="button"
-                    onClick={() => updatePost({ ...post, isDeleted: true })}
+                    onClick={() =>
+                      updatePost({
+                        ...post,
+                        isDeleted: true,
+                      })
+                    }
                   >
                     Delete
                   </button>
@@ -158,21 +159,15 @@ const PostItem = function ({ post }: Props): JSX.Element {
             </div>
           </div>
         </div>
-        <div>
-          {renderTextContent()}
-        </div>
+        <div>{renderTextContent()}</div>
         <div className="d-flex text-secondary mt-2">
-          {likes}
-          {' '}
-          Likes
+          {likes} Likes
           <FontAwesomeIcon
             className="my-auto mx-1"
             icon={faCircle}
             style={{ fontSize: 4 }}
           />
-          {postComments.length}
-          {' '}
-          Comments
+          {postComments.length} Comments
         </div>
       </div>
       <div className="card-footer">
@@ -203,20 +198,23 @@ const PostItem = function ({ post }: Props): JSX.Element {
           </button>
         </span>
         {(showCommentSection || postComments.length > 0) && (
-        <div>
-          <div className="d-flex flex-row mt-3 mb-3 w-100">
-            <Avatar className="me-2" size="sm" />
-            <input
-              className="px-3 w-100"
-              placeholder="Add a comment"
-              onKeyPress={handleCommentKeyPress}
-              style={{ borderRadius: '25px', borderStyle: 'solid' }}
-            />
+          <div>
+            <div className="d-flex flex-row mt-3 mb-3 w-100">
+              <Avatar className="me-2" size="sm" />
+              <input
+                className="px-3 w-100"
+                placeholder="Add a comment"
+                onKeyPress={handleCommentKeyPress}
+                style={{
+                  borderRadius: '25px',
+                  borderStyle: 'solid',
+                }}
+              />
+            </div>
+            {postComments.map((comment) => (
+              <CommentItem key={`Comment-${comment.id}`} comment={comment} />
+            ))}
           </div>
-          {postComments.map((comment) => (
-            <CommentItem key={`Comment-${comment.id}`} comment={comment} />
-          ))}
-        </div>
         )}
       </div>
     </div>
