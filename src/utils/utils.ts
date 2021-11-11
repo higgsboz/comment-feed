@@ -22,5 +22,5 @@ export function dateToString(date: Date): string {
         return `${diffDay.hour()} hours ago`;
     }
 
-    return diffDay.format('MM/DD/YYYY');
+    return dayDate.format('MM/DD/YYYY');
 }
