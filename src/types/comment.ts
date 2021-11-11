@@ -1,4 +1,4 @@
-import {Person} from './person'
+import { Person } from './person';
 
 export interface Comment {
     id: number;
@@ -8,4 +8,4 @@ export interface Comment {
     createdDate: Date;
     createdBy: Person;
     isDeleted: boolean;
-}  
+}
