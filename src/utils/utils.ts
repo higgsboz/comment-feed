@@ -4,6 +4,7 @@ const ONE_MINUTE = 60 * 1000;
 const ONE_HOUR = 60 * ONE_MINUTE;
 const ONE_DAY = ONE_HOUR * 24;
 
+// eslint-disable-next-line
 export function dateToString(date: Date): string {
   const dayDate = dayjs(date);
 

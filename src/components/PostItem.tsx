@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircle, faCommentDots, faEllipsisH, faHeart, faMapMarkerAlt,
@@ -11,7 +11,12 @@ import { useFeed } from '../FeedContext';
 import Avatar from './Avatar';
 import Me from '../assets/Me.json';
 
-const PostItem = function (post: Post) {
+interface Props {
+  post: Post
+}
+
+// eslint-disable-next-line func-names
+const PostItem = function ({ post }: Props): JSX.Element {
   const {
     id, text, likes, createdDate, createdBy,
   } = post;
@@ -24,42 +29,37 @@ const PostItem = function (post: Post) {
   const [isEditMode, setEditMode] = useState<boolean>(false);
   const [editText, setEditText] = useState<string>(text);
 
-  const postComments: Comment[] = useMemo(() => comments
-    .filter((comment) => comment.postId === id && !comment.isDeleted)
+  const postComments: Comment[] = useMemo(() => comments.filter((comment) => comment.postId === id && !comment.isDeleted)
     .sort((a, b) => b.createdDate.getTime() - a.createdDate.getTime()), [id, comments]);
 
-  const addComment = (text: string) => {
-    const post: Post | null = posts.find((post) => post.id === id) ?? null;
-
-    if (post) {
-      const comment: Comment = {
-        id: comments.length + 1,
-        postId: post.id,
-        text,
-        likes: 0,
-        createdDate: new Date(),
-        createdBy: Me,
-        isDeleted: false,
-      };
-      setComments([
-        ...comments,
-        comment,
-      ]);
-    }
-  };
-
-  const updatePost = (updatedPost: Post) => {
-    setPosts([
-      ...posts.slice(0, post.id - 1),
-      {
-        ...posts[post.id - 1],
-        ...updatedPost,
-      },
-      ...posts.slice(post.id),
+  const addComment = (commentText: string): void => {
+    const comment: Comment = {
+      id: comments.length + 1,
+      postId: id,
+      text: commentText,
+      likes: 0,
+      createdDate: new Date(),
+      createdBy: Me,
+      isDeleted: false,
+    };
+    setComments([
+      ...comments,
+      comment,
     ]);
   };
 
-  const handleCommentKeyPress = (e: any) => {
+  const updatePost = (updatedPost: Post): void => {
+    setPosts([
+      ...posts.slice(0, id - 1),
+      {
+        ...posts[id - 1],
+        ...updatedPost,
+      },
+      ...posts.slice(id),
+    ]);
+  };
+
+  const handleCommentKeyPress = (e: any): void => {
     // Create the comment if the key is Enter and the value exists
     if (e.key === 'Enter' && e.target.value !== '') {
       addComment(e.target.value);
@@ -67,7 +67,7 @@ const PostItem = function (post: Post) {
     }
   };
 
-  const handlePostEditKeyPress = (e: any) => {
+  const handlePostEditKeyPress = (e: any): void => {
     // Update the post if the key is Enter and the value isn't whitespace
     if (e.key === 'Enter' && !/\s/.test(e.target.value)) {
       updatePost({ ...post, text: e.target.value });
@@ -75,9 +75,9 @@ const PostItem = function (post: Post) {
     }
   };
 
-  const renderTextContent = () => {
+  const renderTextContent = (): JSX.Element => {
     if (!isEditMode) {
-      return text;
+      return <span>{text}</span>;
     }
 
     return (
@@ -88,6 +88,7 @@ const PostItem = function (post: Post) {
         value={editText}
         placeholder="What is on your mind?"
         style={{ resize: 'none' }}
+        // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus
         onBlur={() => setEditMode(false)}
         onKeyPress={handlePostEditKeyPress}
@@ -103,22 +104,56 @@ const PostItem = function (post: Post) {
           <Avatar size="lg" />
           <div className="d-flex flex-row w-100 justify-content-between">
             <div className="ms-3">
-              <div className="fw-bold">{`${createdBy.firstName} ${createdBy.lastName}`}</div>
+              <div className="fw-bold">
+                {`${createdBy.firstName} ${createdBy.lastName}`}
+              </div>
               <div className="text-primary fw-bold" style={{ fontSize: 12 }}>
                 <FontAwesomeIcon className="me-2" icon={faMapMarkerAlt} />
                 {createdBy.location.state}
                 ,
+                {' '}
                 {createdBy.location.country}
               </div>
-              <div className="text-secondary fw-bold" style={{ fontSize: 12 }}>{dateToString(createdDate)}</div>
+              <div
+                className="text-secondary fw-bold"
+                style={{ fontSize: 12 }}
+              >
+                {dateToString(createdDate)}
+              </div>
             </div>
             <div className="dropdown dropstart my-auto">
-              <button className="btn btn-link link-secondary p-0" type="button" id={`Post-${id}-dropdown-button`} data-bs-toggle="dropdown" aria-expanded="false">
+              <button
+                className="btn btn-link link-secondary p-0"
+                type="button"
+                id={`Post-${id}-dropdown-button`}
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
                 <FontAwesomeIcon icon={faEllipsisH} />
               </button>
-              <ul className="dropdown-menu" aria-labelledby={`Post-${id}-dropdown-button`}>
-                <li><button className="btn btn-link dropdown-item" onClick={() => setEditMode(true)} disabled={isEditMode}>Edit</button></li>
-                <li><button className="btn btn-link dropdown-item" onClick={() => updatePost({ ...post, isDeleted: true })}>Delete</button></li>
+              <ul
+                className="dropdown-menu"
+                aria-labelledby={`Post-${id}-dropdown-button`}
+              >
+                <li>
+                  <button
+                    className="btn btn-link dropdown-item"
+                    type="button"
+                    onClick={() => setEditMode(true)}
+                    disabled={isEditMode}
+                  >
+                    Edit
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="btn btn-link dropdown-item"
+                    type="button"
+                    onClick={() => updatePost({ ...post, isDeleted: true })}
+                  >
+                    Delete
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
@@ -130,7 +165,11 @@ const PostItem = function (post: Post) {
           {likes}
           {' '}
           Likes
-          <FontAwesomeIcon className="my-auto mx-1" icon={faCircle} style={{ fontSize: 4 }} />
+          <FontAwesomeIcon
+            className="my-auto mx-1"
+            icon={faCircle}
+            style={{ fontSize: 4 }}
+          />
           {postComments.length}
           {' '}
           Comments
@@ -138,18 +177,28 @@ const PostItem = function (post: Post) {
       </div>
       <div className="card-footer">
         <span>
-          <button className="btn btn-link link-secondary p-0" onClick={() => updatePost({ ...post, likes: post.likes + 1 })}>
+          <button
+            className="btn btn-link link-secondary p-0"
+            type="button"
+            onClick={() => updatePost({ ...post, likes: likes + 1 })}
+          >
             <FontAwesomeIcon className="me-2 text-secondary" icon={faHeart} />
             Like
           </button>
         </span>
         <span className="ms-3">
           <button
-            className={`btn btn-link link-secondary p-0 ${showCommentSection || postComments.length > 0 ? 'fw-bold' : null}`}
+            className={`btn btn-link link-secondary p-0 ${
+              showCommentSection || postComments.length > 0 ? 'fw-bold' : null
+            }`}
+            type="button"
             onClick={() => setShowCommentSection(!showCommentSection)}
             style={{ cursor: 'pointer' }}
           >
-            <FontAwesomeIcon className="me-2 text-secondary" icon={faCommentDots} />
+            <FontAwesomeIcon
+              className="me-2 text-secondary"
+              icon={faCommentDots}
+            />
             Comment
           </button>
         </span>
@@ -157,10 +206,15 @@ const PostItem = function (post: Post) {
         <div>
           <div className="d-flex flex-row mt-3 mb-3 w-100">
             <Avatar className="me-2" size="sm" />
-            <input className="px-3 w-100" placeholder="Add a comment" onKeyPress={handleCommentKeyPress} style={{ borderRadius: '25px', borderStyle: 'solid' }} />
+            <input
+              className="px-3 w-100"
+              placeholder="Add a comment"
+              onKeyPress={handleCommentKeyPress}
+              style={{ borderRadius: '25px', borderStyle: 'solid' }}
+            />
           </div>
           {postComments.map((comment) => (
-            <CommentItem key={`Comment-${comment.id}`} {...comment} />
+            <CommentItem key={`Comment-${comment.id}`} comment={comment} />
           ))}
         </div>
         )}

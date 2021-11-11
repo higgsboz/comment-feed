@@ -1,3 +1,4 @@
+import React from 'react';
 import profilePicture from '../assets/profile-pic.png';
 import missingAvatar from '../assets/missing-avatar.png';
 
@@ -11,7 +12,8 @@ type AvatarProps = {
     size: 'sm' | 'lg'
 }
 
-const Avatar = function ({ className, size }: AvatarProps) {
+// eslint-disable-next-line func-names
+const Avatar = function ({ className, size }: AvatarProps): JSX.Element {
   return (
     <img
       src={profilePicture}
@@ -19,10 +21,16 @@ const Avatar = function ({ className, size }: AvatarProps) {
       width={SizeDimension[size]}
       height={SizeDimension[size]}
       alt="avatar"
-            // @ts-ignore
-      onError={(e) => { e.target.onerror = null; e.target.src = missingAvatar; }}
+      onError={(e: any) => {
+        e.target.onerror = null;
+        e.target.src = missingAvatar;
+      }}
     />
   );
+};
+
+Avatar.defaultProps = {
+  className: '',
 };
 
 export default Avatar;

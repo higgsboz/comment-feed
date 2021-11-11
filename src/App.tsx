@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons';
@@ -9,10 +9,10 @@ import PostItem from './components/PostItem';
 import Avatar from './components/Avatar';
 import Me from './assets/Me.json';
 
-const ContentCreator = function () {
+const ContentCreator = function (): JSX.Element {
   const { posts, setPosts } = useFeed();
 
-  const addPost = (text: string) => {
+  const addPost = (text: string): void => {
     const newPost = {
       id: posts.length + 1,
       text,
@@ -65,7 +65,7 @@ const ContentCreator = function () {
   );
 };
 
-const Feed = function () {
+const Feed = function (): JSX.Element {
   const { posts } = useFeed();
 
   return (
@@ -76,7 +76,7 @@ const Feed = function () {
           {posts.filter((post) => !post.isDeleted).sort((a, b) => b.createdDate.getTime() - a.createdDate.getTime()).map((post: Post) => (
             <PostItem
               key={`Post-${post.id}`}
-              {...post}
+              post={post}
             />
           ))}
         </div>
@@ -85,7 +85,7 @@ const Feed = function () {
   );
 };
 
-const App = function () {
+const App = function (): JSX.Element {
   return (
     <FeedProvider>
       <Feed />
