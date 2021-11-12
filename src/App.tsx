@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FeedProvider } from './FeedContext';
+import { FeedProvider } from './contexts/FeedContext';
 import Feed from './components/Feed';
 
 const App = function (): JSX.Element {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons';
-import { useFeed } from '../FeedContext';
+import { useFeed } from '../contexts/FeedContext';
 import Avatar from './Avatar';
 import Me from '../assets/Me.json';
 
@@ -23,7 +23,7 @@ const ContentCreator = function (): JSX.Element {
   const [message, setMessage] = useState<string>('');
 
   return (
-    <div className="card shadow-sm rounded-3">
+    <div className="card shadow-sm rounded-card">
       <div className="card-body">
         <div className="mb-3 d-flex flex-row">
           <Avatar size="sm" />
@@ -39,18 +39,18 @@ const ContentCreator = function (): JSX.Element {
       </div>
       <div className="card-footer bg-transparent">
         <div className="d-flex flex-wrap justify-content-between">
-          <button type="button" className="btn btn-dark rounded-pill">
+          <button type="button" className="btn btn-dark rounded-pill mt-1">
             <FontAwesomeIcon className="me-2" icon={faPhotoVideo} />
             Photo/Video
           </button>
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary mt-1"
             onClick={() => {
               addPost(message);
               setMessage('');
             }}
-            disabled={message.length === 0 || /\s/.test(message)}
+            disabled={message.trim().length === 0}
           >
             Post It
           </button>

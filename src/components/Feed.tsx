@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFeed } from '../FeedContext';
+import { useFeed } from '../contexts/FeedContext';
 import { Post } from '../types/post';
 import PostItem from './PostItem';
 import ContentCreator from './ContentCreator';
@@ -9,7 +9,7 @@ const Feed = function (): JSX.Element {
 
   return (
     <div className="main-bg min-vh-100">
-      <div className="container">
+      <div className="container-sm">
         <div className="py-3">
           <ContentCreator />
           {posts

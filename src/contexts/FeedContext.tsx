@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { Comment } from './types/comment';
-import { Post } from './types/post';
+import { Comment } from '../types/comment';
+import { Post } from '../types/post';
 
 export type FeedContextProps = {
   posts: Post[];

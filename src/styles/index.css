@@ -22,7 +22,7 @@ textarea {
 }
 
 .main-bg {
-  background-color: var(--main-bg-color);
+  background-color: var(--main-bg-color) !important;
 }
 
 .fs-sm {
@@ -40,4 +40,8 @@ textarea {
 
 .text-secondary-dark {
   color: #495057;
+}
+
+.rounded-card {
+  border-radius: 10px !important;
 }

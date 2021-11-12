@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Comment } from '../types/comment';
 import { dateToString } from '../utils/utils';
-import { useFeed } from '../FeedContext';
+import { useFeed } from '../contexts/FeedContext';
 import Avatar from './Avatar';
 
 interface Props {
@@ -37,7 +37,7 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
     e: React.KeyboardEvent<HTMLTextAreaElement>
   ): void => {
     const target = e.target as HTMLTextAreaElement;
-    if (e.key === 'Enter' && target.value !== '') {
+    if (e.key === 'Enter' && target.value.trim().length !== 0) {
       updateComment({ ...comment, text: target.value });
       setEditMode(false);
     }
@@ -67,8 +67,8 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
   return (
     <div className="d-flex flex-row mt-3 mb-3 w-100">
       <Avatar className="me-2" size="sm" />
-      <div className="card w-100">
-        <div className="card-body main-bg">
+      <div className="card rounded-card main-bg w-100">
+        <div className="card-body">
           <div className="d-flex justify-content-between">
             <span className="fs-6 fw-normal text-secondary-dark">
               {`${createdBy.firstName} ${createdBy.lastName}`}
@@ -79,7 +79,7 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
           </div>
           <span className="text-primary fs-sm">{createdBy.occupation}</span>
           <div className="fs-sm">{renderTextContent()}</div>
-          <div className="d-flex text-secondary">
+          <div className="d-flex flex-wrap text-secondary">
             <span className="me-2">
               {likes} {likes === 1 ? 'Like' : 'Likes'}
             </span>

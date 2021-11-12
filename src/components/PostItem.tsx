@@ -11,7 +11,7 @@ import { Post } from '../types/post';
 import { Comment } from '../types/comment';
 import CommentItem from './CommentItem';
 import { dateToString } from '../utils/utils';
-import { useFeed } from '../FeedContext';
+import { useFeed } from '../contexts/FeedContext';
 import Avatar from './Avatar';
 import Me from '../assets/Me.json';
 
@@ -65,7 +65,7 @@ const PostItem = function ({ post }: Props): JSX.Element {
   ): void => {
     // Create the comment if the key is Enter and the value exists
     const target = e.target as HTMLInputElement;
-    if (e.key === 'Enter' && target.value !== '') {
+    if (e.key === 'Enter' && target.value.trim().length !== 0) {
       addComment(target.value);
       target.value = '';
     }
@@ -76,7 +76,7 @@ const PostItem = function ({ post }: Props): JSX.Element {
   ): void => {
     // Update the post if the key is Enter and the value isn't whitespace
     const target = e.target as HTMLTextAreaElement;
-    if (e.key === 'Enter' && !/\s/.test(target.value)) {
+    if (e.key === 'Enter' && target.value.trim().length !== 0) {
       updatePost({ ...post, text: target.value });
       setEditMode(false);
     }
@@ -96,7 +96,10 @@ const PostItem = function ({ post }: Props): JSX.Element {
         placeholder="What is on your mind?"
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus
-        onBlur={() => setEditMode(false)}
+        onBlur={() => {
+          setEditMode(false);
+          setEditText(text);
+        }}
         onKeyPress={handlePostEditKeyPress}
         onChange={(e) => setEditText(e.target.value)}
       />
@@ -104,7 +107,7 @@ const PostItem = function ({ post }: Props): JSX.Element {
   };
 
   return (
-    <div className="card shadow-sm rounded-3 mt-3">
+    <div className="card shadow-sm rounded-card mt-3">
       <div className="card-body">
         <div className="d-flex flex-row mb-3">
           <Avatar size="lg" />
