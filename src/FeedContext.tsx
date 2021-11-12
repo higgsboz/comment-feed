@@ -42,7 +42,6 @@ const dateParser = (_key: string, value: any): any => {
 
 const FeedContext = createContext<FeedContextProps>({} as FeedContextProps);
 
-// eslint-disable-next-line func-names,
 export const FeedProvider = function ({ children }: FeedProviderProps): any {
   const localPosts: Post[] = JSON.parse(
     localStorage.getItem('postData') || '[]',

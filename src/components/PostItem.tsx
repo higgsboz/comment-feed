@@ -19,7 +19,6 @@ interface Props {
   post: Post;
 }
 
-// eslint-disable-next-line func-names
 const PostItem = function ({ post }: Props): JSX.Element {
   const { id, text, likes, createdDate, createdBy } = post;
 

@@ -14,7 +14,6 @@ interface Props {
   comment: Comment;
 }
 
-// eslint-disable-next-line func-names
 const CommentItem = function ({ comment }: Props): JSX.Element {
   const { id, text, likes, createdDate, createdBy } = comment;
 

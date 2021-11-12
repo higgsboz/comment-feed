@@ -12,7 +12,6 @@ type AvatarProps = {
   size: 'sm' | 'lg';
 };
 
-// eslint-disable-next-line func-names
 const Avatar = function ({ className, size }: AvatarProps): JSX.Element {
   return (
     <img
