@@ -84,10 +84,12 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
           </span>
           <div style={{ fontSize: 14 }}>{renderTextContent()}</div>
           <div className="d-flex text-secondary">
-            <span className="me-3">{likes} Likes</span>
-            <span className="me-3">|</span>
+            <span className="me-2">
+              {likes} {likes === 1 ? 'Like' : 'Likes'}
+            </span>
+            <span className="me-2">|</span>
             <button
-              className="btn btn-link link-secondary me-3 p-0"
+              className="btn btn-link link-secondary me-2 p-0"
               type="button"
               onClick={() => {
                 updateComment({ ...comment, likes: likes + 1 });
@@ -100,9 +102,9 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
               />
               Like
             </button>
-            <span className="me-3">|</span>
+            <span className="me-2">|</span>
             <button
-              className="btn btn-link link-secondary me-3 p-0"
+              className="btn btn-link link-secondary me-2 p-0"
               type="button"
               onClick={() => setEditMode(true)}
             >
@@ -113,9 +115,9 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
               />
               Edit
             </button>
-            <span className="me-3">|</span>
+            <span className="me-2">|</span>
             <button
-              className="btn btn-link link-secondary me-3 p-0"
+              className="btn btn-link link-secondary me-2 p-0"
               type="button"
               onClick={() => updateComment({ ...comment, isDeleted: true })}
             >

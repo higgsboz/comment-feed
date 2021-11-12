@@ -61,18 +61,24 @@ const PostItem = function ({ post }: Props): JSX.Element {
     ]);
   };
 
-  const handleCommentKeyPress = (e: any): void => {
+  const handleCommentKeyPress = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ): void => {
     // Create the comment if the key is Enter and the value exists
-    if (e.key === 'Enter' && e.target.value !== '') {
-      addComment(e.target.value);
-      e.target.value = '';
+    const target = e.target as HTMLInputElement;
+    if (e.key === 'Enter' && target.value !== '') {
+      addComment(target.value);
+      target.value = '';
     }
   };
 
-  const handlePostEditKeyPress = (e: any): void => {
+  const handlePostEditKeyPress = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ): void => {
     // Update the post if the key is Enter and the value isn't whitespace
-    if (e.key === 'Enter' && !/\s/.test(e.target.value)) {
-      updatePost({ ...post, text: e.target.value });
+    const target = e.target as HTMLTextAreaElement;
+    if (e.key === 'Enter' && !/\s/.test(target.value)) {
+      updatePost({ ...post, text: target.value });
       setEditMode(false);
     }
   };
@@ -161,7 +167,7 @@ const PostItem = function ({ post }: Props): JSX.Element {
         </div>
         <div>{renderTextContent()}</div>
         <div className="d-flex text-secondary mt-2">
-          {likes} Likes
+          {likes} {likes === 1 ? 'Like' : 'Likes'}
           <FontAwesomeIcon
             className="my-auto mx-1"
             icon={faCircle}

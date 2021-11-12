@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import profilePicture from '../assets/profile-pic.png';
 import missingAvatar from '../assets/missing-avatar.png';
 
@@ -21,9 +21,10 @@ const Avatar = function ({ className, size }: AvatarProps): JSX.Element {
       width={SizeDimension[size]}
       height={SizeDimension[size]}
       alt="avatar"
-      onError={(e: any) => {
-        e.target.onerror = null;
-        e.target.src = missingAvatar;
+      onError={(e: SyntheticEvent<HTMLImageElement>) => {
+        const target = e.target as HTMLImageElement;
+        target.onerror = null;
+        target.src = missingAvatar;
       }}
     />
   );

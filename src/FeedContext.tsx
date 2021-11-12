@@ -18,7 +18,7 @@ type FeedProviderProps = {
 // dates formatted as JSON strings will be converted into JS Date objects.
 // eslint-disable-next-line max-len
 // This code was taken from https://weblog.west-wind.com/posts/2014/jan/06/javascript-json-date-parsing-and-real-dates
-const dateParser = (_key: any, value: any): any => {
+const dateParser = (_key: string, value: any): any => {
   // eslint-disable-next-line
   var reISO =
     // eslint-disable-next-line max-len
@@ -65,13 +65,6 @@ export const FeedProvider = function ({ children }: FeedProviderProps): any {
     localStorage.setItem('commentData', JSON.stringify(updatedComments));
     setComments(updatedComments);
   };
-
-  // const providerValue = useMemo(() => ({
-  //   posts,
-  //   setPosts: updatePosts,
-  //   comments,
-  //   setComments: updateComments,
-  // }), [posts, updatePosts, comments, updateComments]);
 
   return (
     <FeedContext.Provider
