@@ -18,6 +18,7 @@ type FeedProviderProps = {
 // dates formatted as JSON strings will be converted into JS Date objects.
 // eslint-disable-next-line max-len
 // This code was taken from https://weblog.west-wind.com/posts/2014/jan/06/javascript-json-date-parsing-and-real-dates
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dateParser = (_key: string, value: any): any => {
   // eslint-disable-next-line
   var reISO =
@@ -42,6 +43,7 @@ const dateParser = (_key: string, value: any): any => {
 
 const FeedContext = createContext<FeedContextProps>({} as FeedContextProps);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FeedProvider = function ({ children }: FeedProviderProps): any {
   const localPosts: Post[] = JSON.parse(
     localStorage.getItem('postData') || '[]',

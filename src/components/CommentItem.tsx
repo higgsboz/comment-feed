@@ -55,7 +55,6 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
         rows={2}
         value={editText}
         placeholder="Add a comment"
-        style={{ resize: 'none' }}
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus
         onBlur={() => setEditMode(false)}
@@ -68,20 +67,18 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
   return (
     <div className="d-flex flex-row mt-3 mb-3 w-100">
       <Avatar className="me-2" size="sm" />
-      <div className="card w-100" style={{ backgroundColor: '#D9E1EB' }}>
-        <div className="card-body">
+      <div className="card w-100">
+        <div className="card-body main-bg">
           <div className="d-flex justify-content-between">
-            <span className="fw-bold">
+            <span className="fs-6 fw-normal text-secondary-dark">
               {`${createdBy.firstName} ${createdBy.lastName}`}
             </span>
-            <span className="text-secondary" style={{ fontSize: 14 }}>
+            <span className="text-secondary fs-sm">
               {dateToString(createdDate)}
             </span>
           </div>
-          <span className="text-primary" style={{ fontSize: 14 }}>
-            {createdBy.occupation}
-          </span>
-          <div style={{ fontSize: 14 }}>{renderTextContent()}</div>
+          <span className="text-primary fs-sm">{createdBy.occupation}</span>
+          <div className="fs-sm">{renderTextContent()}</div>
           <div className="d-flex text-secondary">
             <span className="me-2">
               {likes} {likes === 1 ? 'Like' : 'Likes'}
@@ -94,11 +91,7 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
                 updateComment({ ...comment, likes: likes + 1 });
               }}
             >
-              <FontAwesomeIcon
-                className="me-2"
-                icon={faHeart}
-                style={{ fontSize: 14 }}
-              />
+              <FontAwesomeIcon className="me-2 fs-sm" icon={faHeart} />
               Like
             </button>
             <span className="me-2">|</span>
@@ -107,11 +100,7 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
               type="button"
               onClick={() => setEditMode(true)}
             >
-              <FontAwesomeIcon
-                className="me-2"
-                icon={faPencilAlt}
-                style={{ fontSize: 14 }}
-              />
+              <FontAwesomeIcon className="me-2 fs-sm" icon={faPencilAlt} />
               Edit
             </button>
             <span className="me-2">|</span>
@@ -120,11 +109,7 @@ const CommentItem = function ({ comment }: Props): JSX.Element {
               type="button"
               onClick={() => updateComment({ ...comment, isDeleted: true })}
             >
-              <FontAwesomeIcon
-                className="me-2"
-                icon={faTrash}
-                style={{ fontSize: 14 }}
-              />
+              <FontAwesomeIcon className="me-2 fs-sm" icon={faTrash} />
               Delete
             </button>
           </div>

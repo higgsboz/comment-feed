@@ -94,7 +94,6 @@ const PostItem = function ({ post }: Props): JSX.Element {
         rows={2}
         value={editText}
         placeholder="What is on your mind?"
-        style={{ resize: 'none' }}
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus
         onBlur={() => setEditMode(false)}
@@ -110,15 +109,13 @@ const PostItem = function ({ post }: Props): JSX.Element {
         <div className="d-flex flex-row mb-3">
           <Avatar size="lg" />
           <div className="d-flex flex-row w-100 justify-content-between">
-            <div className="ms-3">
-              <div className="fw-bold">
-                {`${createdBy.firstName} ${createdBy.lastName}`}
-              </div>
-              <div className="text-primary fw-bold" style={{ fontSize: 12 }}>
+            <div className="fw-normal ms-3 text-secondary-dark">
+              <div>{`${createdBy.firstName} ${createdBy.lastName}`}</div>
+              <div className="text-primary fs-sm">
                 <FontAwesomeIcon className="me-2" icon={faMapMarkerAlt} />
                 {createdBy.location.state}, {createdBy.location.country}
               </div>
-              <div className="text-secondary fw-bold" style={{ fontSize: 12 }}>
+              <div className="text-secondary fs-sm">
                 {dateToString(createdDate)}
               </div>
             </div>
@@ -193,7 +190,6 @@ const PostItem = function ({ post }: Props): JSX.Element {
             }`}
             type="button"
             onClick={() => setShowCommentSection(!showCommentSection)}
-            style={{ cursor: 'pointer' }}
           >
             <FontAwesomeIcon
               className="me-2 text-secondary"
@@ -207,13 +203,9 @@ const PostItem = function ({ post }: Props): JSX.Element {
             <div className="d-flex flex-row mt-3 mb-3 w-100">
               <Avatar className="me-2" size="sm" />
               <input
-                className="px-3 w-100"
+                className="input-pill px-3 w-100"
                 placeholder="Add a comment"
                 onKeyPress={handleCommentKeyPress}
-                style={{
-                  borderRadius: '25px',
-                  borderStyle: 'solid',
-                }}
               />
             </div>
             {postComments.map((comment) => (
